@@ -1,0 +1,23 @@
+# https://blog.kolide.com/build-custom-osquery-tables-using-atc-ab112a30674c
+
+{
+    "auto_table_construction" : {
+        "quarantine_items" : {
+          "query" : "SELECT LSQuarantineEventIdentifier as id, LSQuarantineAgentName as agent_name, LSQuarantineAgentBundleIdentifier as agent_bundle_identifier, LSQuarantineTypeNumber as type, LSQuarantineDataURLString as data_url,LSQuarantineOriginURLString as origin_url, LSQuarantineSenderName as sender_name, LSQuarantineSenderAddress as sender_address, LSQuarantineTimeStamp as timestamp from LSQuarantineEvent",
+          "path" : "/Users/%/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV2",
+          "columns" : ["id", "type", "agent_name", "agent_bundle_identifier", "timestamp", "sender_name", "sender_address", "origin_url", "data_url"]
+        },
+        "chrome_browser_history" : {
+            "query" : "SELECT urls.id id, urls.url url, urls.title title, urls.visit_count visit_count, urls.typed_count typed_count, urls.last_visit_time last_visit_time, urls.hidden hidden, visits.visit_time visit_time, visits.from_visit from_visit, visits.visit_duration visit_duration, visits.transition transition, visit_source.source source FROM urls JOIN visits ON urls.id = visits.url LEFT JOIN visit_source ON visits.id = visit_source.id",
+            "path" : "/Users/%/Library/Application Support/Google/Chrome/%/History",
+            "columns" : ["path", "id", "url", "title", "visit_count", "typed_count", "last_visit_time", "hidden", "visit_time", "visit_duration", "source"],
+            "platform" : "darwin"
+        },
+        "chrome_login_keychain" : {
+            "query" : "SELECT origin_url, action_url, username_value, password_element FROM logins",
+            "path" : "/Users/%/Library/Application Support/Google/Chrome/Default/Login Data",
+            "columns" : ["origin_url", "action_url", "username_value", "password_element"],
+            "platform" : "darwin"
+        }
+    }
+}
